@@ -1,0 +1,3 @@
+# blat
+
+## verkefni í lífupplýsingafræði
