@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # if k-mer appears more often then 60 times, skip it
 CUTOFF = 60
 
@@ -25,18 +28,19 @@ class Blat:
 
 
 
-
+#búum til refrence index fyrir erfðamengið
     def create_index(self):
         i = 0
+        self.index = {}
         while i < (len(self.genome)-self.k+1):
-            if(self.genome[i:i+self.k] in self.index):
+            if self.genome[i:i+self.k] in self.index:
                 self.index[self.genome[i:i+self.k]].append(i)
             else:
                 self.index[self.genome[i:i+self.k]] = [i]
             i += self.k
         self.save_index()
-        return self.index
 
+#save-um reference indexið í fæl, svo við þurfum ekki að búa það til í hvert sinn
     def save_index(self):
         s = ""
         for ke, it in self.index.items():
@@ -65,28 +69,40 @@ class Blat:
         # print(dict)
         diag = {}
         # key is
+
         for ke, itm in dict.items():
             for j in range(len(itm)):
                 if (itm[j] - ke) in diag:
                     # print("in")
+                    # hits[ke] = diag[itm[j] -ke][0]
                     diag[itm[j]-ke].append(itm[j])
                 else:
                     diag[itm[j] -ke] = [itm[j]]
         # print(diag)
+        hits = []
         for ke, itm in diag.items():
             if len(itm) > 1 :
-                print("more")
-                print("many " + str(len(itm)))
-                print(ke)
+                hits.append(itm[0])
+                # print("more")
+                # print("many " + str(len(itm)))
+                #
+                # for i in range(len(itm)-1):
+                #     print(itm[i])
+                #     if itm[i+1] -itm[i] > self.k:
+                #         print("stokk")
+                # print(itm[-1])
+        if(len(hits) > 0):
+            self.nucleotide_alignment(hits,query)
+        return hits
 
 
 
 
     #take two strings and compare every letter and return how many dont match
-    def match_errors(t1, t2):
+    def match_errors(self, t1, t2):
         err = 0
         for i in range(len(t1)):
-            if(t1[i] != t2[i]):
+            if t1[i] != t2[i]:
                 err += 1
         return err
 
@@ -107,8 +123,32 @@ class Blat:
         return True
 
 
-    def nucleotide_alignment(self):
+    def nucleotide_alignment(self, hits, query):
         print()
+        for j in range(len(hits)):
+            firstHit = hits[j]
+            for i in range(len(query)):
+                if query[i:i+self.k] == self.genome[firstHit:firstHit+self.k]:
+                    i1 = i
+                    i2 = i + self.k
+                    f1 = firstHit
+                    f2 = firstHit+self.k
+                    while True:
+                        if i1>0 and f1>0 and query[i1-1] == self.genome[f1-1]:
+                            i1-=1
+                            f1-=1
+                        if i2<len(query)-1 and f2<len(self.genome)-1 and query[i2+1] == self.genome[f2+1]:
+                            i2+=1
+                            f2+=1
+                        else:
+                            break
+                    print("^^^^^^^^^^^^^")
+                    print(query[i1:i2])
+                    print(i1,i2)
+                    print(f1, f2)
+                    break
+
+
 
 
 
