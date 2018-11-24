@@ -37,14 +37,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3285" />
+          <entry key="py" value="4083" />
           <entry key="txt" value="84" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="84" />
-          <entry key="Python" value="3285" />
+          <entry key="Python" value="4083" />
         </counts>
       </usages-collector>
     </session>
@@ -54,7 +54,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/transcripts.fasta">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-136" />
+            <state relative-caret-position="-116" />
           </provider>
         </entry>
       </file>
@@ -62,9 +62,9 @@
         <entry file="file://$PROJECT_DIR$/blat.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="179">
-              <caret line="162" column="18" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
+              <caret line="84" column="57" selection-start-line="84" selection-start-column="57" selection-end-line="84" selection-end-column="57" />
               <folding>
-                <marker date="1543076498468" expanded="true" signature="1410:1697" ph="..." />
+                <marker date="1543080238187" expanded="true" signature="1441:1728" ph="..." />
               </folding>
             </state>
           </provider>
@@ -77,7 +77,11 @@
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/subseq.fasta">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="12" selection-start-column="4" selection-end-column="12" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -132,7 +136,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543076498607" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543080220342" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -160,12 +164,12 @@
       <option name="presentableId" value="Default" />
       <updated>1543060358669</updated>
       <workItem from="1543060360277" duration="54000" />
-      <workItem from="1543060450144" duration="15695000" />
+      <workItem from="1543060450144" duration="19431000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15749000" />
+    <option name="totallyTimeSpent" value="19485000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -226,22 +230,26 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/subseq.fasta">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/transcripts.fasta">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-136" />
+        <state>
+          <caret column="12" selection-start-column="4" selection-end-column="12" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/index.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/transcripts.fasta">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-116" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/blat.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
-          <caret line="162" column="18" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
+          <caret line="84" column="57" selection-start-line="84" selection-start-column="57" selection-end-line="84" selection-end-column="57" />
           <folding>
-            <marker date="1543076498468" expanded="true" signature="1410:1697" ph="..." />
+            <marker date="1543080238187" expanded="true" signature="1441:1728" ph="..." />
           </folding>
         </state>
       </provider>

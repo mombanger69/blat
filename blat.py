@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 # if k-mer appears more often then 60 times, skip it
-CUTOFF = 60
+
 
 # kannski sniðugt að nota classa, bara fyrir skipulag, kannski er það stupid
 class Blat:
 
     # kannski best að láta genome vera path að fælnum, og svo self.genome vera strengur með erfðamenginu
-    def __init__(self, genome, k):
+    def __init__(self, genome, k, cutoff):
         self.genome = open(genome).read().split('\n')[1]
         self.k = k
         # index of hit in the database
@@ -16,11 +16,12 @@ class Blat:
         #na i index save-ad i file
         self.index = {}
         file.pop()
+        self.cutoff = cutoff
         for f in file:
             line = f.split(" ")
             nums = line[1].split(",")
             self.index[line[0]] = [int(nums[0])]
-            if(len(nums) < CUTOFF):
+            if(len(nums) < self.cutoff):
                 for i in range(1,len(nums)):
                     self.index[line[0]].append(int(nums[i]))
 
@@ -59,72 +60,42 @@ class Blat:
 #las a wikipedia ad blat notar thetta, held lika ad thetta se seed and extend
 # N er number of perfect matches
     def search_with_multiple_perfect_matches(self, query, N, W):
+        if N<1:
+            print("can't compare 0 items")
+            return
         i = 0
         dict = {}
         # pos in query is key, pos in genome is value (list)
         while i < (len(query)-self.k+1):
-            if(query[i:i+self.k] in self.index):
+            if query[i:i+self.k] in self.index:
                 dict[i] = self.index[query[i:i+self.k]]
             i += 1
-        # print(dict)
         diag = {}
-        # key is
 
         for ke, itm in dict.items():
             for j in range(len(itm)):
                 if (itm[j] - ke) in diag:
-                    # print("in")
-                    # hits[ke] = diag[itm[j] -ke][0]
                     diag[itm[j]-ke].append(itm[j])
                 else:
-                    diag[itm[j] -ke] = [itm[j]]
-        # print(diag)
+                    diag[itm[j]-ke] = [itm[j]]
         hits = []
         for ke, itm in diag.items():
-            if len(itm) > 1 :
-                hits.append(itm[0])
-                # print("more")
-                # print("many " + str(len(itm)))
-                #
-                # for i in range(len(itm)-1):
-                #     print(itm[i])
-                #     if itm[i+1] -itm[i] > self.k:
-                #         print("stokk")
-                # print(itm[-1])
-        if(len(hits) > 0):
-            self.nucleotide_alignment(hits,query)
+            if len(itm) > 1:
+                for i in range(N-1, len(itm)):
+                    # won't add to hits unless less then W away from other
+                    if itm[i] - itm[i-N+1] < W:
+                        hits.append(itm[i])
+                        break
+
+        self.nucleotide_alignment(hits,query)
         return hits
 
 
-
-
-    #take two strings and compare every letter and return how many dont match
-    def match_errors(self, t1, t2):
-        err = 0
-        for i in range(len(t1)):
-            if t1[i] != t2[i]:
-                err += 1
-        return err
-
-# returns if deletions is less then N
-    def N_deletions(N, t1, t2):
-        j=0
-        i=0
-        err = 0
-        while i < len(t1):
-            if(err > N):
-                return False
-            if(t1[i] != t2[j]):
-                i+=1
-                err+=1
-            else:
-                i+=1
-                j+=1
-        return True
-
-
     def nucleotide_alignment(self, hits, query):
-        print()
+        if len(hits) > 0:
+            print("has alignments.")
+        else:
+            print("has no alignments.")
         for j in range(len(hits)):
             firstHit = hits[j]
             for i in range(len(query)):
@@ -142,10 +113,18 @@ class Blat:
                             f2+=1
                         else:
                             break
-                    print("^^^^^^^^^^^^^")
-                    print(query[i1:i2])
-                    print(i1,i2)
-                    print(f1, f2)
+                    # print("^^^^^^^^^^^^^")
+                    # print(query[i1:i2+1])
+
+                    print("In Query.")
+                    print("begin pos " + str(i1+1))
+                    print("end pos " + str(i2+1))
+                    print("In Genome.")
+                    # with or without offset
+                    print( "begin pos " + str(53000000 + f1,))
+                    print("end pos "+ str(53000000+ f2))
+                    # print(f1,f2)
+                    print()
                     break
 
 
@@ -153,24 +132,20 @@ class Blat:
 
 
 
-
-
-
-b = Blat('./data/subseq.fasta', 11)
+b = Blat('./data/subseq.fasta', 11, 20)
 
 # only run create index in first run
 # b.create_index()
+
 qu = open("./data/transcripts.fasta").read().split("\n")
-b.search_with_multiple_perfect_matches(qu[5], 2, 200)
+
 
 i = 1
-
-
 while i < len(qu):
-    print("############")
-    print(i)
+    print()
+    print("###################")
+    print("Nucleotide sequence")
+    print(qu[i-1])
     b.search_with_multiple_perfect_matches(qu[i], 2, 200)
     i+=2
-# b.get_dict()
 
-print("buid")
