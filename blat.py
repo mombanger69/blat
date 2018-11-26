@@ -14,7 +14,8 @@ initMem = process.memory_info().rss
 class Blat:
 
     # kannski best að láta genome vera path að fælnum, og svo self.genome vera strengur með erfðamenginu
-    def __init__(self, genome, k, cutoff):
+    def __init__(self, genome, k, cutoff, genomeoffset):
+        self.genomeoffset = genomeoffset
         self.genome = open(genome).read().split('\n')[1]
         self.k = k
         # index of hit in the database
@@ -126,8 +127,8 @@ class Blat:
                     print("end pos " + str(i2+1))
                     print("In Genome.")
                     # with or without offset
-                    print( "begin pos " + str(53000000 + f1,))
-                    print("end pos "+ str(53000000+ f2))
+                    print("begin pos " + str(self.genomeoffset + f1))
+                    print("end pos "+ str(self.genomeoffset+ f2))
                     # print(f1,f2)
                     print()
                     break
@@ -136,11 +137,11 @@ class Blat:
 
 
 
-
-b = Blat('./data/subseq.fasta', 11, 20)
+# cutoff is how many kmer is too many
+b = Blat('./data/subseq.fasta', k=11, cutoff=20, genomeoffset=53000000)
 
 # only run create index in first run
-b.create_index()
+# b.create_index()
 
 qu = open("./data/transcripts.fasta").read().split("\n")
 
@@ -156,4 +157,5 @@ while i < len(qu):
     i+=2
 
 endMem = process.memory_info().rss
+
 print("memory used", (endMem - initMem) / float(2**20), "MB")
