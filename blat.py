@@ -4,7 +4,8 @@
 import os
 import psutil
 process = psutil.Process(os.getpid())
-print(process.memory_info().rss)
+
+initMem = process.memory_info().rss
 
 # if k-mer appears more often then 60 times, skip it
 
@@ -154,4 +155,5 @@ while i < len(qu):
     b.nucleotide_alignment(hits, qu[i])
     i+=2
 
-print("memory used",process.memory_info().rss)
+endMem = process.memory_info().rss
+print("memory used", (endMem - initMem) / float(2**20), "MB")
