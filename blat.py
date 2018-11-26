@@ -16,23 +16,27 @@ class Blat:
     # kannski best að láta genome vera path að fælnum, og svo self.genome vera strengur með erfðamenginu
     def __init__(self, genome, k, cutoff, genomeoffset):
         self.genomeoffset = genomeoffset
-        self.genome = open(genome).read().split('\n')[1]
         self.k = k
-        # index of hit in the database
-        file = open('./data/index.txt', "r").read().split("\n")
-        #na i index save-ad i file
-        self.index = {}
-        file.pop()
         self.cutoff = cutoff
+
+        self.genome = open(genome).read().split('\n')[1]
+
+        #na i index save-ad i file
+        self.load_index()
+
+
+    def load_index(self):
+        # index of hit in the database
+        self.index = {}
+        file = open('./data/index.txt', "r").read().split("\n")
+        file.pop()
         for f in file:
             line = f.split(" ")
             nums = line[1].split(",")
             self.index[line[0]] = [int(nums[0])]
-            if(len(nums) < self.cutoff):
-                for i in range(1,len(nums)):
-                    self.index[line[0]].append(int(nums[i]))
 
-
+            for i in range(1,len(nums)):
+                self.index[line[0]].append(int(nums[i]))
 
 
 
@@ -46,6 +50,13 @@ class Blat:
             else:
                 self.index[self.genome[i:i+self.k]] = [i]
             i += self.k
+        toDelete = []
+        for ke, it in self.index.items():
+            if len(it) >= self.cutoff:
+                toDelete.append(ke)
+        for t in toDelete:
+            del self.index[t]
+
         self.save_index()
 
 #save-um reference indexið í fæl, svo við þurfum ekki að búa það til í hvert sinn
@@ -60,6 +71,8 @@ class Blat:
         f = open('./data/index.txt', 'w')
         f.write(s)
         f.close()
+
+
 
 
 
