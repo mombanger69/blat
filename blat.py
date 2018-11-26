@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import psutil
+process = psutil.Process(os.getpid())
+print(process.memory_info().rss)
+
 # if k-mer appears more often then 60 times, skip it
 
 
@@ -87,7 +92,6 @@ class Blat:
                         hits.append(itm[i])
                         break
 
-        self.nucleotide_alignment(hits,query)
         return hits
 
 
@@ -135,7 +139,7 @@ class Blat:
 b = Blat('./data/subseq.fasta', 11, 20)
 
 # only run create index in first run
-# b.create_index()
+b.create_index()
 
 qu = open("./data/transcripts.fasta").read().split("\n")
 
@@ -146,6 +150,8 @@ while i < len(qu):
     print("###################")
     print("Nucleotide sequence")
     print(qu[i-1])
-    b.search_with_multiple_perfect_matches(qu[i], 2, 200)
+    hits = b.search_with_multiple_perfect_matches(qu[i], 2, 200)
+    b.nucleotide_alignment(hits, qu[i])
     i+=2
 
+print("memory used",process.memory_info().rss)
