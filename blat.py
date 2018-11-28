@@ -110,31 +110,39 @@ class Blat:
 
     def nucleotide_alignment(self, hits, query):
         score = 1
+
+        # athuga hvar lasthit var og ekki skoða lengra til baka í querinu en það
+        lastHit = 0
         if len(hits) > 0:
             print("has alignments.")
+            print(len(hits))
         else:
             print("has no alignments.")
         for j in range(len(hits)):
             # minus einn ef hann hoppar milli blokka
             score -= 1
             firstHit = hits[j]
+
             for i in range(len(query)):
                 if query[i:i+self.k] == self.genome[firstHit:firstHit+self.k]:
-                    score += self.k
+                    # kmer fyrir score fra 0,11 er 12
+                    score += self.k +1
                     i1 = i
                     i2 = i + self.k
                     f1 = firstHit
                     f2 = firstHit+self.k
                     while True:
-                        if i1>0 and f1>0 and query[i1-1] == self.genome[f1-1]:
+                        if i1>lastHit and f1>0 and query[i1-1] == self.genome[f1-1]:
+                            score += 1
                             i1-=1
                             f1-=1
-                            score += 1
+
                         if i2<len(query)-1 and f2<len(self.genome)-1 and query[i2+1] == self.genome[f2+1]:
+                            score += 1
                             i2+=1
                             f2+=1
-                            score += 1
                         else:
+                            lastHit = i2 + 1
                             break
                     # print("^^^^^^^^^^^^^")
                     # print(query[i1:i2+1])
