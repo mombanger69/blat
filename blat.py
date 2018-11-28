@@ -118,7 +118,8 @@ class Blat:
             # minus einn ef hann hoppar milli blokka
             score -= 1
             firstHit = hits[j]
-
+            # i=0
+            # while(i < len(query)):
             for i in range(len(query)):
                 if query[i:i+self.k] == self.genome[firstHit:firstHit+self.k]:
                     # kmer að lengd k er fra 0,k og fær því score er k+1
@@ -139,6 +140,7 @@ class Blat:
                             f2+=1
                         else:
                             lastHit = i2 + 1
+                            # i = i2+1
                             break
                     print("In Query.")
                     print("begin pos " + str(i1+1))
@@ -151,6 +153,7 @@ class Blat:
 
                     print()
                     break
+                # i+=1
         if(len(hits) > 1):
             print("score " + str(score))
 
@@ -159,10 +162,10 @@ class Blat:
 
 
 # cutoff is how many kmer is too many
-b = Blat('./data/subseq.fasta', k=11, cutoff=50, genomeoffset=53000000)
+b = Blat('./data/subseq.fasta', k=11, cutoff=20, genomeoffset=53000000)
 
 # only run create index in first run
-# b.create_index()
+b.create_index()
 
 qu = open("./data/transcripts.fasta").read().split("\n")
 
