@@ -7,9 +7,6 @@ process = psutil.Process(os.getpid())
 
 initMem = process.memory_info().rss
 
-# if k-mer appears more often then 60 times, skip it
-
-
 # kannski sniðugt að nota classa, bara fyrir skipulag, kannski er það stupid
 class Blat:
 
@@ -50,6 +47,7 @@ class Blat:
             else:
                 self.index[self.genome[i:i+self.k]] = [i]
             i += self.k
+        # eyða algengnum k-mers
         toDelete = []
         for ke, it in self.index.items():
             if len(it) >= self.cutoff:
@@ -104,18 +102,16 @@ class Blat:
                     if itm[i] - itm[i-N+1] < W:
                         hits.append(itm[i])
                         break
-
         return hits
 
 
     def nucleotide_alignment(self, hits, query):
+        # byrja með score 1, því hann fær strax minus
         score = 1
-
         # athuga hvar lasthit var og ekki skoða lengra til baka í querinu en það
         lastHit = 0
         if len(hits) > 0:
             print("has alignments.")
-            print(len(hits))
         else:
             print("has no alignments.")
         for j in range(len(hits)):
@@ -125,7 +121,7 @@ class Blat:
 
             for i in range(len(query)):
                 if query[i:i+self.k] == self.genome[firstHit:firstHit+self.k]:
-                    # kmer fyrir score fra 0,11 er 12
+                    # kmer að lengd k er fra 0,k og fær því score er k+1
                     score += self.k +1
                     i1 = i
                     i2 = i + self.k
@@ -144,9 +140,6 @@ class Blat:
                         else:
                             lastHit = i2 + 1
                             break
-                    # print("^^^^^^^^^^^^^")
-                    # print(query[i1:i2+1])
-
                     print("In Query.")
                     print("begin pos " + str(i1+1))
                     print("end pos " + str(i2+1))
@@ -158,14 +151,15 @@ class Blat:
 
                     print()
                     break
-        print("score " + str(score))
+        if(len(hits) > 1):
+            print("score " + str(score))
 
 
 
 
 
 # cutoff is how many kmer is too many
-b = Blat('./data/subseq.fasta', k=11, cutoff=20, genomeoffset=53000000)
+b = Blat('./data/subseq.fasta', k=11, cutoff=50, genomeoffset=53000000)
 
 # only run create index in first run
 # b.create_index()
