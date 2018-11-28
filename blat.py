@@ -75,8 +75,6 @@ class Blat:
 
 
 
-
-
 #las a wikipedia ad blat notar thetta, held lika ad thetta se seed and extend
 # N er number of perfect matches
     def search_with_multiple_perfect_matches(self, query, N, W):
@@ -111,14 +109,18 @@ class Blat:
 
 
     def nucleotide_alignment(self, hits, query):
+        score = 1
         if len(hits) > 0:
             print("has alignments.")
         else:
             print("has no alignments.")
         for j in range(len(hits)):
+            # minus einn ef hann hoppar milli blokka
+            score -= 1
             firstHit = hits[j]
             for i in range(len(query)):
                 if query[i:i+self.k] == self.genome[firstHit:firstHit+self.k]:
+                    score += self.k
                     i1 = i
                     i2 = i + self.k
                     f1 = firstHit
@@ -127,9 +129,11 @@ class Blat:
                         if i1>0 and f1>0 and query[i1-1] == self.genome[f1-1]:
                             i1-=1
                             f1-=1
+                            score += 1
                         if i2<len(query)-1 and f2<len(self.genome)-1 and query[i2+1] == self.genome[f2+1]:
                             i2+=1
                             f2+=1
+                            score += 1
                         else:
                             break
                     # print("^^^^^^^^^^^^^")
@@ -143,8 +147,10 @@ class Blat:
                     print("begin pos " + str(self.genomeoffset + f1))
                     print("end pos "+ str(self.genomeoffset+ f2))
                     # print(f1,f2)
+
                     print()
                     break
+        print("score " + str(score))
 
 
 
@@ -165,10 +171,10 @@ while i < len(qu):
     print("###################")
     print("Nucleotide sequence")
     print(qu[i-1])
-    hits = b.search_with_multiple_perfect_matches(qu[i], 2, 200)
+    hits = b.search_with_multiple_perfect_matches(qu[i], 2, 100000)
     b.nucleotide_alignment(hits, qu[i])
     i+=2
 
-endMem = process.memory_info().rss
+# endMem = process.memory_info().rss
 
-print("memory used", (endMem - initMem) / float(2**20), "MB")
+# print("memory used", (endMem - initMem) / float(2**20), "MB")
