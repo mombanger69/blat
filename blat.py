@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import psutil
-process = psutil.Process(os.getpid())
-
-initMem = process.memory_info().rss
-
 # kannski sniðugt að nota classa, bara fyrir skipulag, kannski er það stupid
 class Blat:
 
@@ -17,14 +11,14 @@ class Blat:
         self.cutoff = cutoff
 
         self.genome = open(genome).read().split('\n')[1]
-
+        self.index = {}
         #na i index save-ad i file
         self.load_index()
 
 
     def load_index(self):
         # index of hit in the database
-        self.index = {}
+
         file = open('./data/index.txt', "r").read().split("\n")
         file.pop()
         for f in file:
@@ -37,7 +31,7 @@ class Blat:
 
 
 
-#búum til refrence index fyrir erfðamengið
+# búum til refrence index fyrir erfðamengið
     def create_index(self):
         i = 0
         self.index = {}
@@ -56,6 +50,7 @@ class Blat:
             del self.index[t]
 
         self.save_index()
+
 
 #save-um reference indexið í fæl, svo við þurfum ekki að búa það til í hvert sinn
     def save_index(self):
@@ -118,8 +113,6 @@ class Blat:
             # minus einn ef hann hoppar milli blokka
             score -= 1
             firstHit = hits[j]
-            # i=0
-            # while(i < len(query)):
             for i in range(len(query)):
                 if query[i:i+self.k] == self.genome[firstHit:firstHit+self.k]:
                     # kmer að lengd k er fra 0,k og fær því score er k+1
@@ -140,7 +133,6 @@ class Blat:
                             f2+=1
                         else:
                             lastHit = i2 + 1
-                            # i = i2+1
                             break
                     print("In Query.")
                     print("begin pos " + str(i1+1))
@@ -149,12 +141,14 @@ class Blat:
                     # with or without offset
                     print("begin pos " + str(self.genomeoffset + f1))
                     print("end pos "+ str(self.genomeoffset+ f2))
+                    # without offsett
                     # print(f1,f2)
 
-                    print()
+
                     break
                 # i+=1
         if(len(hits) > 1):
+            print()
             print("score " + str(score))
 
 
@@ -170,16 +164,12 @@ b.create_index()
 qu = open("./data/transcripts.fasta").read().split("\n")
 
 
-i = 1
-while i < len(qu):
+ind = 1
+while ind < len(qu):
     print()
     print("###################")
     print("Nucleotide sequence")
-    print(qu[i-1])
-    hits = b.search_with_multiple_perfect_matches(qu[i], 2, 100000)
-    b.nucleotide_alignment(hits, qu[i])
-    i+=2
-
-# endMem = process.memory_info().rss
-
-# print("memory used", (endMem - initMem) / float(2**20), "MB")
+    print(qu[ind-1])
+    hits = b.search_with_multiple_perfect_matches(qu[ind], 2, 100000)
+    b.nucleotide_alignment(hits, qu[ind])
+    ind+=2
