@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 
 # kannski sniðugt að nota classa, bara fyrir skipulag, kannski er það stupid
 class Blat:
@@ -143,12 +142,10 @@ class Blat:
                     print("end pos "+ str(self.genomeoffset+ f2))
                     # without offsett
                     # print(f1,f2)
-
-
+                    print()
                     break
                 # i+=1
         if(len(hits) > 1):
-            print()
             print("score " + str(score))
 
 
